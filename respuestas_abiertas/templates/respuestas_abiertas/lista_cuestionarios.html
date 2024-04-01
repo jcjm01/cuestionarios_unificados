@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cuestionarios</title>
+</head>
+<body>
+    <h1>Cuestionarios Disponibles</h1>
+    <ul>
+        {% for cuestionario in cuestionarios %}
+            <li>
+                <a href="{% url 'respuestas_abiertas:cuestionario_detalle' cuestionario.id %}">{{ cuestionario.titulo }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

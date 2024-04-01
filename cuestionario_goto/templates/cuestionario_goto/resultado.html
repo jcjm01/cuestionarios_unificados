@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado del Cuestionario</title>
+</head>
+<body>
+    <h1>Resultado del Cuestionario GOTO</h1>
+    <!-- Muestra el resultado del cuestionario (Aprobado o Reprobado) -->
+    <p> <strong>{{ resultado }}</strong>.</p>
+    <!-- Enlace para volver a tomar el cuestionario, asegúrate de que 'cuestionario_view' sea el nombre correcto dado en urls.py -->
+    <a href="{% url 'cuestionario_view' %}">Intentar de nuevo</a>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario</title>
+</head>
+<body>
+    <h1>{{ pregunta.texto }}</h1>
+    <form action="{% url 'responder_pregunta' pregunta.id %}" method="post">
+        {% csrf_token %}
+        {% for respuesta in respuestas %}
+            <input type="radio" id="respuesta{{ respuesta.id }}" name="respuesta_id" value="{{ respuesta.id }}">
+            <label for="respuesta{{ respuesta.id }}">{{ respuesta.texto }}</label><br>
+        {% endfor %}
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>

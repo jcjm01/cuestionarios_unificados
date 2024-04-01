@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cuestionarios</title>
+</head>
+<body>
+    <h1>Lista de Cuestionarios</h1>
+    <ul>
+        {% for cuestionario in cuestionarios %}
+            <li><a href="{% url 'cuestionarios_combinados:detalle_cuestionario' cuestionario.id %}">{{ cuestionario.titulo }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

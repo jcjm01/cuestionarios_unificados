@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ cuestionario.titulo }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .cuestionario-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .pregunta {
+            margin-bottom: 20px;
+        }
+        .pregunta h3 {
+            margin-bottom: 10px;
+        }
+        .respuesta-texto {
+            width: 50%;
+            height: 100px; 
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; 
+            resize: vertical; 
+        }
+        .boton-enviar {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .boton-enviar:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function validarFormulario() {
+            const preguntas = document.querySelectorAll('.pregunta');
+            for (let i = 0; i < preguntas.length; i++) {
+                const pregunta = preguntas[i];
+                if (pregunta.classList.contains('abierta')) {
+                    // Para preguntas abiertas, verifica que el textarea no esté vacío
+                    const textarea = pregunta.querySelector('textarea');
+                    if (textarea.value.trim() === '') {
+                        alert('Por favor, responda todas las preguntas antes de enviar.');
+                        return false; // Evita que el formulario se envíe
+                    }
+                } else {
+                    // Para preguntas cerradas, verifica que se haya seleccionado una opción
+                    const opciones = pregunta.querySelectorAll('input[type=radio]');
+                    const seleccionado = Array.from(opciones).some(r => r.checked);
+                    if (!seleccionado) {
+                        alert('Por favor, responda todas las preguntas antes de enviar.');
+                        return false; // Evita que el formulario se envíe
+                    }
+                }
+            }
+            return true; // Todas las preguntas han sido respondidas, el formulario se puede enviar
+        }
+    </script>
+</head>
+<body>
+    <div class="cuestionario-container">
+        <h1>{{ cuestionario.titulo }}</h1>
+        <p>{{ cuestionario.descripcion }}</p>
+        <form action="{% url 'cuestionarios_combinados:procesar_respuestas' cuestionario.id %}" method="post" onsubmit="return validarFormulario();">
+            {% csrf_token %}
+            {% for pregunta in cuestionario.pregunta_set.all %}
+                <div class="pregunta {% if pregunta.abierta %}abierta{% endif %}">
+                    <h3>{{ pregunta.texto }}</h3>
+                    {% if pregunta.abierta %}
+                        <textarea class="respuesta-texto" name="respuesta_abierta_{{ pregunta.id }}" required maxlength="960"></textarea>
+                    {% else %}
+                        {% for respuesta in pregunta.respuesta_set.all %}
+                            <label>
+                                <input type="radio" name="respuesta_{{ pregunta.id }}" value="{{ respuesta.id }}" required>
+                                {{ respuesta.texto }}
+                            </label><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="boton-enviar">Enviar Respuestas</button>
+        </form>
+    </div>
+</body>
+</html>

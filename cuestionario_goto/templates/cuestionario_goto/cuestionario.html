@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuestionario GOTO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .contenedor {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .pregunta {
+            margin-bottom: 20px;
+        }
+        .pregunta h2 {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .boton-enviar {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .boton-enviar:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function validarFormulario() {
+            const preguntas = document.querySelectorAll('.pregunta');
+            for (let i = 0; i < preguntas.length; i++) {
+                const respuestas = preguntas[i].querySelectorAll('input[type="radio"]:checked');
+                if (respuestas.length === 0) {
+                    alert('Por favor, responde todas las preguntas antes de enviar el formulario.');
+                    return false; // Evita que el formulario se envíe
+                }
+            }
+            return true; // El formulario es válido y puede enviarse
+        }
+    </script>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Cuestionario GOTO</h1>
+        <form method="post" onsubmit="return validarFormulario();">
+            {% csrf_token %}
+            {% for pregunta in preguntas %}
+                <div class="pregunta">
+                    <h2>{{ pregunta.texto }}</h2>
+                    {% for respuesta in pregunta.respuesta_set.all %}
+                        <label>
+                            <input type="radio" name="respuesta_{{ pregunta.id }}" value="{{ respuesta.id }}">
+                            {{ respuesta.texto }}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="boton-enviar">Enviar respuestas</button>
+        </form>
+    </div>
+</body>
+</html>
