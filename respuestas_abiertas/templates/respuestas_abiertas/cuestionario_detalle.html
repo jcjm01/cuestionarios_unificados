@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>{{ cuestionario.titulo }}</title>
     <style>
-        /* Estilos básicos para la página, ajusta según tus necesidades */
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
@@ -22,15 +21,13 @@
         }
         textarea {
             width: 60%;
-            height: 150px; /* Puedes ajustar esto según necesites */
+            height: 150px;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
             margin-bottom: 10px;
-            text-align: left; /* Asegura que el texto comience desde la izquierda */
-            vertical-align: top; /* No afecta a textarea, pero lo dejo por consistencia */
-            resize: vertical; /* Permite al usuario cambiar el tamaño verticalmente. Elimina si no deseas esta funcionalidad */
+            resize: vertical;
         }
         button {
             background-color: #4CAF50;
@@ -45,31 +42,23 @@
         }
     </style>
     <script>
-        // Se espera a que el contenido del DOM esté cargado antes de añadir el controlador de eventos
         document.addEventListener("DOMContentLoaded", function() {
-            // Seleccionamos el formulario y añadimos un controlador de eventos para el 'submit'
             const form = document.querySelector("form");
             form.addEventListener("submit", function(event) {
-                // Seleccionamos todos los campos de área de texto del formulario
                 const textareas = document.querySelectorAll("textarea");
-                let allFilled = true; // Esta variable se usa para verificar si todos los campos están llenos
-
-                // Iteramos sobre cada área de texto para verificar si está vacía
+                let allFilled = true;
                 textareas.forEach(function(textarea) {
                     if (textarea.value.trim() === "") {
-                        allFilled = false; // Si algún campo está vacío, establecemos allFilled a false
-                        textarea.style.borderColor = "red"; // y cambiamos el borde del campo a rojo para indicar el error
+                        allFilled = false;
+                        textarea.style.borderColor = "red";
                     } else {
-                        textarea.style.borderColor = ""; // Si el campo está lleno, reseteamos su borde
+                        textarea.style.borderColor = "#ddd";
                     }
                 });
-
-                // Si no todos los campos están llenos, mostramos un mensaje de error y prevenimos el envío del formulario
                 if (!allFilled) {
-                    event.preventDefault(); // Evita que el formulario se envíe
+                    event.preventDefault();
                     alert("Por favor, responde a todas las preguntas antes de enviar el cuestionario.");
                 }
-                // Si allFilled es verdadero (todos los campos están llenos), el formulario se enviará normalmente
             });
         });
     </script>
@@ -79,11 +68,10 @@
     <form method="post" action="">
         {% csrf_token %}
         {% for pregunta in cuestionario.preguntaabierta_set.all %}
-            <div class="pregunta-container">
-                <!-- Mostramos cada pregunta y su área de texto correspondiente -->
-                <label for="pregunta_{{ pregunta.id }}">{{ pregunta.texto_pregunta }}</label>
-                <textarea id="pregunta_{{ pregunta.id }}" name="pregunta_{{ pregunta.id }}" maxlength="960"></textarea>
-            </div>
+        <div class="pregunta-container">
+            <label for="pregunta_{{ pregunta.id }}">{{ pregunta.texto_pregunta }}</label>
+            <textarea id="pregunta_{{ pregunta.id }}" name="pregunta_{{ pregunta.id }}" maxlength="960"></textarea>
+        </div>
         {% endfor %}
         <button type="submit">Enviar respuestas</button>
     </form>

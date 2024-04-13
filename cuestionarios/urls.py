@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('cuestionario_goto/', include('cuestionario_goto.urls')),  # Incluye las URLs de la app
-    path('respuestas_abiertas/', include('respuestas_abiertas.urls')),
-    path('cuestionarios_combinados/', include('cuestionarios_combinados.urls', namespace='cuestionarios_combinados')),
-    path('', include('cuestionarios_presentacion.urls')),
+    path('cuestionario_goto/', include('cuestionario_goto.urls')),  # Incluye las URLs de la app cuestionario_goto
+    path('respuestas_abiertas/', include('respuestas_abiertas.urls', namespace='respuestas_abiertas')),  # Incluye las URLs de la app respuestas_abiertas con namespace
+    path('cuestionarios_combinados/', include('cuestionarios_combinados.urls', namespace='cuestionarios_combinados')),  # Incluye las URLs de la app cuestionarios_combinados con un namespace
+    path('', include('cuestionarios_presentacion.urls')),  # Página de inicio/presentación
+    path('vista-integrada/', include('integradora.urls')),  # Ruta única para ver integradas las apps bajo la app integradora
 ]

@@ -1,7 +1,9 @@
-# cuestionario_goto/urls.py
 from django.urls import path
-from . import views
+from .views import cuestionario_completo_view, detalle_pregunta_view
+
+app_name = 'cuestionario_goto'
 
 urlpatterns = [
-    path('cuestionario/', views.cuestionario_view, name='cuestionario_view'),
+    path('cuestionario_completo/', cuestionario_completo_view, name='cuestionario_completo'),
+    path('detalle_pregunta/<int:pregunta_id>/', detalle_pregunta_view, name='detalle_pregunta'),
 ]

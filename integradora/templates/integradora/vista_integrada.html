@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cuestionarios Integrados</title>
+</head>
+<body>
+    <h1>Cuestionarios de Respuestas Abiertas</h1>
+    <ul>
+        {% for cuestionario in cuestionarios_abiertos %}
+            <li>
+                <a href="{% url 'respuestas_abiertas:cuestionario_detalle' pk=cuestionario.pk %}">
+                    {{ cuestionario.titulo }}
+                </a>
+                - {{ cuestionario.descripcion }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h1>GoTo Cuestionario Completo</h1>
+    <ul>
+        <li>
+            <a href="{% url 'cuestionario_goto:cuestionario_completo' %}">
+                Acceder al Cuestionario GoTo Completo
+            </a>
+        </li>
+    </ul>
+
+    <h1>Cuestionarios Combinados</h1>
+    <ul>
+        {% for cuestionario in cuestionarios_combinados %}
+            <li>
+                <a href="{% url 'cuestionarios_combinados:detalle_cuestionario' cuestionario_id=cuestionario.pk %}">
+                    {{ cuestionario.titulo }}
+                </a>
+                - {{ cuestionario.descripcion }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

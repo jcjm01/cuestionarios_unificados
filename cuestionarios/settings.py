@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'respuestas_abiertas',
     'cuestionarios_combinados',
     'cuestionarios_presentacion',
+    'integradora',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+# Configuración de ejemplo para Gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'carlos.jimenez@nephosit.com'
+EMAIL_HOST_PASSWORD = 'Lavagancia01%'
+
+DEFAULT_TO_EMAIL = 'carlos.jimenez@nephosit.com'
+# settings.py
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

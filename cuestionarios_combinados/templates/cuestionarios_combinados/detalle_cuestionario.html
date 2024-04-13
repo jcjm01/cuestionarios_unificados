@@ -21,15 +21,17 @@
         .pregunta h3 {
             margin-bottom: 10px;
         }
-        .respuesta-texto {
-            width: 50%;
-            height: 100px; 
+        .respuesta-texto, .respuesta-cerrada {
+            width: 100%;
             padding: 10px;
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; 
-            resize: vertical; 
+            box-sizing: border-box;
+        }
+        .respuesta-texto {
+            height: 100px;
+            resize: vertical;
         }
         .boton-enviar {
             background-color: #4CAF50;
@@ -48,25 +50,18 @@
         function validarFormulario() {
             const preguntas = document.querySelectorAll('.pregunta');
             for (let i = 0; i < preguntas.length; i++) {
-                const pregunta = preguntas[i];
-                if (pregunta.classList.contains('abierta')) {
-                    // Para preguntas abiertas, verifica que el textarea no esté vacío
-                    const textarea = pregunta.querySelector('textarea');
-                    if (textarea.value.trim() === '') {
-                        alert('Por favor, responda todas las preguntas antes de enviar.');
-                        return false; // Evita que el formulario se envíe
-                    }
-                } else {
-                    // Para preguntas cerradas, verifica que se haya seleccionado una opción
-                    const opciones = pregunta.querySelectorAll('input[type=radio]');
-                    const seleccionado = Array.from(opciones).some(r => r.checked);
-                    if (!seleccionado) {
-                        alert('Por favor, responda todas las preguntas antes de enviar.');
-                        return false; // Evita que el formulario se envíe
-                    }
+                const inputs = preguntas[i].querySelectorAll('input[type="text"], textarea, input[type="radio"]:checked');
+                let valid = false;
+                inputs.forEach(input => {
+                    if (input.type === "radio" && input.checked) valid = true;
+                    if ((input.type === "text" || input.tagName.toLowerCase() === "textarea") && input.value.trim() !== '') valid = true;
+                });
+                if (!valid) {
+                    alert('Por favor, complete todas las preguntas antes de enviar.');
+                    return false;
                 }
             }
-            return true; // Todas las preguntas han sido respondidas, el formulario se puede enviar
+            return true;
         }
     </script>
 </head>
@@ -77,19 +72,19 @@
         <form action="{% url 'cuestionarios_combinados:procesar_respuestas' cuestionario.id %}" method="post" onsubmit="return validarFormulario();">
             {% csrf_token %}
             {% for pregunta in cuestionario.pregunta_set.all %}
-                <div class="pregunta {% if pregunta.abierta %}abierta{% endif %}">
-                    <h3>{{ pregunta.texto }}</h3>
-                    {% if pregunta.abierta %}
-                        <textarea class="respuesta-texto" name="respuesta_abierta_{{ pregunta.id }}" required maxlength="960"></textarea>
-                    {% else %}
-                        {% for respuesta in pregunta.respuesta_set.all %}
-                            <label>
-                                <input type="radio" name="respuesta_{{ pregunta.id }}" value="{{ respuesta.id }}" required>
-                                {{ respuesta.texto }}
-                            </label><br>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+            <div class="pregunta {% if pregunta.abierta %}abierta{% else %}cerrada{% endif %}">
+                <h3>{{ pregunta.texto }}</h3>
+                {% if pregunta.abierta %}
+                <textarea class="respuesta-texto" name="respuesta_abierta_{{ pregunta.id }}" required></textarea>
+                {% else %}
+                    {% for respuesta in pregunta.respuesta_set.all %}
+                        <label>
+                            <input type="radio" name="respuesta_{{ pregunta.id }}" value="{{ respuesta.texto }}" required>
+                            {{ respuesta.texto }}
+                        </label><br>
+                    {% endfor %}
+                {% endif %}
+            </div>
             {% endfor %}
             <button type="submit" class="boton-enviar">Enviar Respuestas</button>
         </form>

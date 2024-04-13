@@ -1,0 +1,22 @@
+<!-- integradora/templates/integradora/plantilla_integrada.html -->
+<html>
+<head>
+    <title>Página Integrada</title>
+</head>
+<body>
+    <h1>Respuestas Abiertas</h1>
+    {% for respuesta in respuestas_abiertas %}
+        <p>{{ respuesta.descripcion }}</p>  <!-- Asumiendo que el modelo tiene un campo 'descripcion' -->
+    {% endfor %}
+
+    <h1>Cuestionario GoTo</h1>
+    {% for pregunta in cuestionario_goto %}
+        <p>{{ pregunta.descripcion }}</p>  <!-- Cambia 'descripcion' según tu modelo -->
+    {% endfor %}
+
+    <h1>Cuestionarios Combinados</h1>
+    {% for item in cuestionarios_combinados %}
+        <p>{{ item.descripcion }}</p>  <!-- Cambia 'descripcion' según tu modelo -->
+    {% endfor %}
+</body>
+</html>
